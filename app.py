@@ -109,7 +109,8 @@ def handle_login():
     if role == 'admin':
         return redirect('/orders')
     else:
-        return redirect('/order_form')
+        return redirect('/')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
