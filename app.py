@@ -53,8 +53,8 @@ def calculate_custom_price(toppings, base=8.00):
 
 @app.route('/')
 def index():
-    house_choices = list(HOUSE_PIZZAS.keys())
-    return render_template('order_form.html', house_choices=house_choices)
+    return redirect('/login')
+
 
 @app.route('/submit', methods=['POST'])
 def submit_order():
