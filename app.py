@@ -1,66 +1,35 @@
 from flask import Flask, request, render_template, redirect
 from datetime import datetime
 
-
 app = Flask(__name__)
 
 orders = []
 HOUSE_PIZZAS = {
-    'Margherita': {
-        'toppings': ['Mozzarella', 'Basil', 'Tomato'],
-        'price': 10.00
-    },
-    'Meatlovers': {
-        'toppings': ['Pepperoni', 'Sausage', 'Bacon'],
-        'price': 14.00
-    },
-    'Hawaiian': {
-        'toppings': ['Ham', 'Pineapple', 'Cheese'],
-        'price': 12.00
-    },
-    'BBQ Chicken': {
-        'toppings': ['Chicken', 'BBQ Sauce', 'Red Onions', 'Cheese'],
-        'price': 13.50
-    },
-    'Veggie Deluxe': {
-        'toppings': ['Bell Peppers', 'Onions', 'Mushrooms', 'Olives', 'Cheese'],
-        'price': 11.50
-    },
-    'Four Cheese': {
-        'toppings': ['Mozzarella', 'Cheddar', 'Parmesan', 'Gorgonzola'],
-        'price': 13.00
-    },
-    'Spicy Pepperoni': {
-        'toppings': ['Pepperoni', 'Jalapeños', 'Chili Flakes', 'Cheese'],
-        'price': 12.50
-    },
-    'Mediterranean': {
-        'toppings': ['Feta', 'Olives', 'Spinach', 'Sun-dried Tomatoes'],
-        'price': 14.00
-    },
-    'Truffle Mushroom': {
-        'toppings': ['Mushrooms', 'Truffle Oil', 'Parmesan', 'Arugula'],
-        'price': 16.00
-    },
-    'Seafood Special': {
-        'toppings': ['Shrimp', 'Clams', 'Garlic', 'Cheese'],
-        'price': 17.00
-    }
+    'Margherita': {'toppings': ['Mozzarella', 'Basil', 'Tomato'], 'price': 10.00},
+    'Meatlovers': {'toppings': ['Pepperoni', 'Sausage', 'Bacon'], 'price': 14.00},
+    'Hawaiian': {'toppings': ['Ham', 'Pineapple', 'Cheese'], 'price': 12.00},
+    'BBQ Chicken': {'toppings': ['Chicken', 'BBQ Sauce', 'Red Onions', 'Cheese'], 'price': 13.50},
+    'Veggie Deluxe': {'toppings': ['Bell Peppers', 'Onions', 'Mushrooms', 'Olives', 'Cheese'], 'price': 11.50},
+    'Four Cheese': {'toppings': ['Mozzarella', 'Cheddar', 'Parmesan', 'Gorgonzola'], 'price': 13.00},
+    'Spicy Pepperoni': {'toppings': ['Pepperoni', 'Jalapeños', 'Chili Flakes', 'Cheese'], 'price': 12.50},
+    'Mediterranean': {'toppings': ['Feta', 'Olives', 'Spinach', 'Sun-dried Tomatoes'], 'price': 14.00},
+    'Truffle Mushroom': {'toppings': ['Mushrooms', 'Truffle Oil', 'Parmesan', 'Arugula'], 'price': 16.00},
+    'Seafood Special': {'toppings': ['Shrimp', 'Clams', 'Garlic', 'Cheese'], 'price': 17.00}
 }
+
 def calculate_custom_price(toppings, base=8.00):
     return base + len(toppings) * 1.50
 
-
+# 👇 Home route goes to order form for customers
 @app.route('/')
 def index():
-    return redirect('/login')
-
+    house_choices = list(HOUSE_PIZZAS.keys())
+    return render_template('order_form.html', house_choices=house_choices)
 
 @app.route('/submit', methods=['POST'])
 def submit_order():
     name = request.form['name']
     pizza = request.form['pizza']
-
 
     if pizza in HOUSE_PIZZAS:
         toppings = HOUSE_PIZZAS[pizza]['toppings']
@@ -82,7 +51,6 @@ def submit_order():
     orders.append(order)
     return render_template('order_confirm.html', order=order)
 
-
 @app.route('/orders')
 def show_orders():
     return render_template('order_list.html', orders=orders)
@@ -94,8 +62,8 @@ def update_status():
 
     for order in orders:
         if order['id'] == int(order_id):
-           order['status'] = new_status
-           break
+            order['status'] = new_status
+            break
 
     return redirect('/orders')
 
@@ -105,12 +73,13 @@ def login():
 
 @app.route('/handle_login', methods=['POST'])
 def handle_login():
-    role = request.form['role']
+    role = request.form.get('role')
+    print("Login role received:", role)
     if role == 'admin':
         return redirect('/orders')
     else:
-        return redirect('/')
-
+        return redirect('/')  # takes customers to order_form
 
 if __name__ == '__main__':
     app.run(debug=True)
+
