@@ -4,7 +4,6 @@ from datetime import datetime
 app = Flask(__name__)
 
 orders = []
-
 HOUSE_PIZZAS = {
     'Margherita': {'toppings': ['Mozzarella', 'Basil', 'Tomato'], 'price': 10.00},
     'Meatlovers': {'toppings': ['Pepperoni', 'Sausage', 'Bacon'], 'price': 14.00},
@@ -34,8 +33,10 @@ def handle_login():
     role = request.form.get('role')
     if role == 'admin':
         return redirect('/orders')
-    else:
+    elif role == 'customer':
         return redirect('/order_form')
+    else:
+        return redirect('/login')
 
 @app.route('/order_form')
 def order_form():
