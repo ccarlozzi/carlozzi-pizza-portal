@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Carlozzi's Pizza Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+  <div class="container mt-5">
+    <div class="card shadow p-4">
+      <h1 class="text-center mb-4">🍕 Order Your Pizza</h1>
+      <form action="/submit" method="POST">
+
+        <div class="mb-3">
+          <label class="form-label">Your Name:</label>
+          <input type="text" class="form-control" name="name" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Pizza Type:</label>
+          <select name="pizza" class="form-select" required>
+            {% for pizza in house_choices %}
+              <option value="{{ pizza }}">{{ pizza }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Toppings:</label>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" name="toppings" value="Extra Cheese">
+            <label class="form-check-label">Extra Cheese</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" name="toppings" value="Mushrooms">
+            <label class="form-check-label">Mushrooms</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" name="toppings" value="Olives">
+            <label class="form-check-label">Olives</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" name="toppings" value="Jalapeños">
+            <label class="form-check-label">Jalapeños</label>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-danger w-100">Submit Order</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
