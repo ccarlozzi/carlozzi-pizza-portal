@@ -74,15 +74,24 @@ def show_orders():
 
 @app.route('/update_status', methods=['POST'])
 def update_status():
-    order_id = request.form['order_id']
-    new_status = request.form['new_status']
+    order_id = request.form.get('order_id')
+    new_status = request.form.get('new_status')
+
+    if not order_id or not new_status:
+        return "Missing order_id or new_status", 400
+
+    try:
+        order_id = int(order_id)
+    except ValueError:
+        return "Invalid order_id", 400
 
     for order in orders:
-        if order['id'] == int(order_id):
+        if order['id'] == order_id:
             order['status'] = new_status
             break
 
     return redirect('/orders')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
