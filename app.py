@@ -4,6 +4,7 @@ from datetime import datetime
 app = Flask(__name__)
 
 orders = []
+
 HOUSE_PIZZAS = {
     'Margherita': {'toppings': ['Mozzarella', 'Basil', 'Tomato'], 'price': 10.00},
     'Meatlovers': {'toppings': ['Pepperoni', 'Sausage', 'Bacon'], 'price': 14.00},
@@ -20,9 +21,24 @@ HOUSE_PIZZAS = {
 def calculate_custom_price(toppings, base=8.00):
     return base + len(toppings) * 1.50
 
-# 👇 Home route goes to order form for customers
 @app.route('/')
 def index():
+    return redirect('/login')
+
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+@app.route('/handle_login', methods=['POST'])
+def handle_login():
+    role = request.form.get('role')
+    if role == 'admin':
+        return redirect('/orders')
+    else:
+        return redirect('/order_form')
+
+@app.route('/order_form')
+def order_form():
     house_choices = list(HOUSE_PIZZAS.keys())
     return render_template('order_form.html', house_choices=house_choices)
 
@@ -67,19 +83,5 @@ def update_status():
 
     return redirect('/orders')
 
-@app.route('/login')
-def login():
-    return render_template('login.html')
-
-@app.route('/handle_login', methods=['POST'])
-def handle_login():
-    role = request.form.get('role')
-    print("Login role received:", role)
-    if role == 'admin':
-        return redirect('/orders')
-    else:
-        return redirect('/')  # takes customers to order_form
-
 if __name__ == '__main__':
     app.run(debug=True)
-
